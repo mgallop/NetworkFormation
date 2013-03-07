@@ -1,0 +1,175 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+%\usetheme{Berlin}
+%\usepackage{german}
+%\usepackage[latin1]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{changebar}
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+%\usepackage[ansinew]{inputenc}
+\usepackage{setspace}
+\usepackage{multicol}
+\usepackage{dcolumn}
+\usepackage{color}
+\usepackage{wasysym}
+\usepackage{movie15}
+\usepackage{MnSymbol}
+\usepackage{marvosym}
+\usepackage{pifont}
+%\usepackage[table]{xcolor} 
+%\beamerdefaultoverlayspecification{<+->}
+\setbeamertemplate{footline}%{infolines theme}
+
+
+
+\begin{document}
+
+\lstset{
+basicstyle=\ttfamily,
+keywordstyle=\bfseries,
+showstringspaces=false,
+columns = fullflexible,
+mathescape = false,
+language=R
+}
+
+
+\title[Gallop Network Formation]
+{Network Formation: Computation, Comparison, and Bargaining}
+\author[M. Gallop]
+{Max Gallop} 
+\institute
+{		Department of Political Science\\
+		Duke University\\
+		
+		}
+
+\date{Version 1.0}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Finding Stable Networks}
+\begin{itemize}
+\item I now have Python code that allows, given a utility function and network with appropriate endowments, to find the Pairwise Nash Stable Networks!
+\item Ran it on a toy network (7 states) and based on the utilty function, left with different networks.
+\includegraphics{SomeExamples.pdf}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Thoughts on Empirical Mapping}
+\begin{itemize}
+\item Use data to create nodes and then find one more stable nash equilibrium given a certain utility function.
+\item Compare to an observed network of cooperation using relevant graph statistics (from Hoff et al's work on ERGM models):
+\begin{enumerate}
+\item Geodesic Distance: The distribution of dyad shortest distance in the networks (ie what percent of dyads have shortest path 1 edge, 2,...)
+\item Edgewise Shared Partner Distribtion: Number of links between dyads with 1 neighbor in common, 2 neighbors in common...
+\item Degree distribution: Number of nodes with outdegree of exactly 0, 1...
+\item Triad census distribution: Proportion of triads with 0, 1, 2,  or 3 edges.
+\end{enumerate}
+\item See whether any models of network formation outperform certain default models (a bernoulli random graph, an empty graph, a full graph) and if so which ones perform best.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Utility and its Meaning}
+\begin{equation}
+U_{j}(G) = F(\sum_{i \neq j} C_{j} * Diff(Id_{j}, Id_{i}) * \delta^{l(i, j)}) - c*d_{i}(G)
+\end{equation}
+\begin{itemize}
+\item $C_{j}$ is the material capability of state j, and Id_{j} is the ideological endowment, with Diff being a function of the distance between the two. An important differentce in potential models of cooperation is the relative weight being placed on each: we could conceive of a naive ``realist" model where capability received full weight and ideological distance received 0 weight, and a naive ``liberal" model where the reverse was true.
+\item $\delta$ represents the positive spillovers of cooperation, and different models can have different levels of positive effects from friends of friends cooperating. F(.) is a concave down function representing the diminishing returns for cooperation.
+\item $c$ is the cost of cooperation: again different models of reality will have differing ideas for how costly cooperation is.
+\begin{enumerate}
+\item A material endowment: a stylized representation of wealth.
+\item An ideological endowment: A number on a (0, 1) scale. The absolute difference between two states ideological endowment's represent their ideological distance.
+\end{enumerate}
+\item Each link $ij$ represents cooperation between state $i$ and staate $j$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Boring Nitty Gritty of Network Games}
+\begin{itemize}
+\item Network of size $n$.
+\item Each actor $i$ chooses a vector of length $n-1$ of $0$'s and $1$'s. If both actor $i$ assigns a $1$ to $j$ and vice versa a link is formed, if either assigns a $0$, no link.
+\item We say this network is stable if no state would be better off removing any number of links (deviating to proposing a vector with $0$'s replacing $1$'s), and no pair of states would be better off adding a link. (Called pairwise nash stability).
+\end{itemize} 
+\end{frame}
+
+\begin{frame}{Endowment: Resources}
+What makes any given actor in a network different from other ones:
+\begin{itemize}
+\item Resources: whehter the type of cooperation is trade, alliance, research or what have you, it is likely more useful to partner with countries with more economic resources.
+\item One possible question is whether states with more resoures gain less utility from cooperation, and how that is balanced by the greater willingness of other states to cooperate with them? 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Endowment: Ideology}
+\begin{itemize}
+\item Ideology: That being said, countries have generally avoided allying with all of the major economic powers in the system. One reason is that ideology mediates the utility of cooperation. Whether this is because of domestic politics (citizens do not like democracies to pal around with unsavory regimes), self-interest (since the threat of attack from a similar type of regime is lower so the possible costs of cooperation are too) or simply the greater ease of cooperating with a regime that has similar organization/ideals/what have you. This also maps onto much of the empirical behavior we've seen (especially during the cold war) where there are two major alliance blocks, one democratic, one not.
+\item A weird claim about ideology and networks: ideology actually changes the role of network effects on calculations. Non-democratic alliances are minimum winning, democratic ones contain supermajorities. (Maoz 2011)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cooperation is costly}
+\begin{itemize}
+\item We need to include a cost for cooperation for both formal and substantive reasons.
+\item Formally, if cooperation is costless we will only see one equilibrium in every network: everyone cooperates with everyone else.
+\item Substantively, most cooperative activities have some costs, even if the benefits often swamp them.
+\begin{enumerate}
+\item Alliances carry risk of being dragged into a war.
+\item Freer trade creates domestic losers and political costs for leaders.
+\item International organizations/treaties carry obligations
+\item Joint research/public goods projects carry pecuniary costs.
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Network Effects}
+Why do we care about the network as opposed to just the utiltiy of a given instance of cooperation?
+\begin{itemize}
+\item One possibility, concave down utility functions s. th. having a link $ij$ makes link $ik$ less valuable. 
+\item At the same time, most forms of cooperation produce positive externalities through the network (this is especially true in alliances but also inheres in many other forms of cooperation) and so we might want to have discounted utility from all members of the network based on the shortest path to them. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Empirical Mapping}
+\begin{itemize}
+\item If we want to test this empirically, issue. Since a game will provide 0 probability to a lot of networks
+\item If we observe a non Pairwise Nash Stable network, likelihood gets zeroed out.
+\item Signorino offers possible solution: add random error to utiltiies, which puts probabilities that are not 0/1 on most outcomes.
+\item Alternatively, explore stochastic stability.
+\item There instead of changing utility function, there is some term $\epsilon$ that a player's choice fails and the opposite action is taken, and then offer a certain number of period of action, which then assigns probability to each network that could result from such failures or the lakck thereof.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Empirical Idea}
+A rough empirical mapping for the endowments would be that polity score represents ideology and GDP represents resources. I took those for the most recent month, and plotted a theoretical network with the vertex size corresponding to resources and color corresponding to a dummy of regime type (red = autocracy, white = mixed...) . I added arbitrary link data to plot them. 
+\end{frame}
+
+\begin{frame}[shrink]{A completely made up network, with real endowments}
+\includegraphics{FakeExample.pdf}
+\end{frame}
+
+\begin{frame}{Where do we go from here?}
+\begin{itemize}
+\item One important decision that has to be made is the particular dataset to investigate as a example of a network of cooperation. Ideally, I'd use at least 2 datasets, 1 to determine the weights of the various parameters of the model, and one (or more!) to test it. Some thoughts:
+\begin{enumerate}
+\item Generate a network of cooperative words using the Factiva data underlying the CRISP stuff.
+\item Possibly use alliance data, which is not interesting to predict, but is theoretically interesting for international cooperation, as the data used to calibrate the model?
+\item Some other measure of cooperation: joint research projects, trade, thing I have not thought of yet?
+\end{enumerate}
+\item Big issue is that analytically finding stable networks seems implausible given that this woud involve solving like 170 equations simultaneously. Need to figure out how to get leverage on it computationally.
+\end{itemize}
+\end{frame}
+
+\end{document}
