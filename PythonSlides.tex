@@ -135,14 +135,23 @@ No actor wants to unilaterally subtract any number of their links.
 \item Solved Issue: Graphs are objects so when you try $G^{'} = G$ and then change $G^{'}$ it changes G too. Solved through use of copy.deepcopy.
 \item Outstanding Issue: Code does not scale up well. Tried it on a network of countries in the world, and it takes about 6000 seconds to run the adding code. Possible solutions: make loops more efficient (already took a step by halving the adding loop), replace some loops with recursion (possible issue with recursion depth on sufficiently large networks), or redo in faster language.
 \item Multiple equilibria: this code finds only one!
+\item Improving Cycles: This code can get stuck.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Multiple Equilibria}
+\begin{frame}{Issues: Multiple Equilibria}
 \begin{itemize}
 \item Identify different equilibria by using different starting graphs.
 \item Algorithm: Generate a series of Bernoulli networks with different probabilities.
 \item Run Find Pairwise Nash: If this is the first time this was done, store the dictionary representation and all utilities as the first item in a list. If not, compare it to the items in the list. If any key (node) has differnt values (edges) the dictionaries differ. If minimum difference >0, we have new equilibria, add it to the list.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Issues: Improving Cycles}
+\begin{itemize}
+\item In some graphs, a series of moves that each are individually rational will lead us in a cycle and the algorithm will not find a Pairwise Stable Network.
+\item We solve this by tracking the steps the graph has taken on its path in a list. If ever the Adding and Cutting algorithm leads to the same graph already in a list--BUT NOT THE MOST RECENT ONE-- we are in an improving cycle.
+\item Solution: Pick a new random network and rerun the code recursively (or change the order and run the code recursively.)
 \end{itemize}
 \end{frame}
 
@@ -189,9 +198,27 @@ Tested the extreme cases.
 \item I'd also claim the endogeneous network framework is useful more generally, and would acknowledge Anna Schultz, who helped fix some of the bugs in the code, think of ways to get at multiple equilibria (though I went in a different direction) because she needed the code for work she was presenting at MPSA/this week.
 \item However, for this to be portable to other players work need to fix two things:
 \begin{enumerate}
-\item MOAR SPEED
+\item MOAR SPEED. Seriously, my other computer is in the middle of a run that is over 150000 seconds as I write these slides.
 \item Less need for users to write their own utility function.
 \end{enumerate}
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}[shrink]{Some Pictures: $\delta = .5, c = .1$: Equilibria1}
+\includegraphics{Eq1.png}
+\end{frame}
+
+\begin{frame}[shrink]{More Pictures: $\delta = .5, c = .1$: Equilibria2}
+\includegraphics{Eq2.png}
+\end{frame}
+
+\begin{frame}[shrink]{Even More: $\delta = .5, c = .1$: Equilibria3}
+\includegraphics{Eq3.png}
+\end{frame}
+
+\begin{frame}[shrink]{And so it goes: $\delta = .5, c = .1$: Equilibria4}
+\includegraphics{Eq4.png}
+\end{frame}
+
 \end{document}
