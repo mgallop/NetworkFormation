@@ -204,14 +204,8 @@ def Find_Many_Pairwise_Nashes(graph, delta, c, granularity):
   for l in frange(0,end = 1, inc = len):
     Coin_Flip_Graph(graph, l)
     Find_Pairwise_Nash(graph, delta, c)
-    changedlist=[]
-    if nx.to_dict_of_lists(graph) not in eqlist:
-      eqlist.append(nx.to_dict_of_lists(graph))
-      plt.clf()
-      nx.draw_circular(graph)
-      plt.draw()
-      plt.savefig("Eq" + str(figs)+".png")
-      figs += 1   
+    if graph.edges() not in eqlist:
+      eqlist.append(graph.edges())
   return eqlist
     
     
