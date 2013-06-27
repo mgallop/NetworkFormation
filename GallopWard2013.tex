@@ -1,4 +1,3 @@
-
 \documentclass[12pt,onesided,fullpage]{amsart}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -56,16 +55,50 @@ The rise of social network analyses in the social sciences has allowed empirical
 
 \section{Modeling Endogeneous Networks}
 \subsection{Equilibrium Concept}
+On the formal side, our stylized conception of network formation is that each of n players decides whether or not to form a link with the other $n-1$ players. If both player $i$ wants to form a link with player $j$ and vice versa, link $ij$ is formed, else not. This network formation game poses somewhat of a problem for Nash Equilibrium--since both players' consent is necessary to form a link, unilateral deviation will never be able to add links, and so we will have a number of suboptimal Nash equilibrium where players would clearly form links. An alternative concept of stability is what is called pairwise stability, where no player would choose to delete any of her links, and no pair of players would like to add a link. This equilibrium concept is also somewhat problematic, because it only requires a network to be superior to those networks with one more or one less link: even if a player could do better by having no links whatsoever than a given network, it still might be pairwise stable if if is better than its neighbors. Combining Nash and pairwise stability accounts for both of these problems: a network must defeat the network formed by any player deleting any number of links or by any pair of players adding a link.
+
+Put simply, the requirements of pairwise Nash stability are:
+\begin{enumerate}
+\item No player can improve their payoff by unilaterally deleting any number of links that they are a party to.
+\item If there is no link between two players, then creating such a link can only improve the utility of one player if it decreases the utiltiy of the other.
+\end{enumerate}
+
 \subsection{Computational Algorithm}
+If we want to apply the network formation game to the study of international cooperation, we are looking at simultaneously finding the maxima of approximately 170 equations, which seems somewhat less tractable than we might wish. Instead we seek to solve the game computationally. We thus design a program that finds a stable equilibrium of the game using the following algorithm:
+\begin{enumerate}
+\item Generate a network $\bf{g}$ either at random or based on a desired starting point. 
+\item Calculate each actor's utility in that network based on the utility functions.
+\item Iterate over every empty link $ij = 0$ and determine whether \\ $u_{i}(g+ij) > u_{i}(g+ij)  \text{ AND } u_{j}(g+ij) > u_{j}(g+ij)$, if so set $g = g + ij$ and go back to step 2, else continue to step 4.
+\item Iterate over every actor $i$ in the network and determine whether $u_{i}(g)$ is greater than the maximum utility for player $i$ for deleting some or all of that actors links. If not, delete those links and go back to step 2. If so, the network is stable.
+\end{enumerate}
 
 \section{An Example: Modeling International Cooperation}
 \subsection{Literature on International Cooperation}
 \subsection{Our Model of Cooperation}
+In this project, we are looking at a cooperative network. A link in this network involves two states cooperating in some international endeavor, whether it be defense, trade, membership in an international non-governmental organization, technological research, common voting in an international organization such as the UN or something else. The question then is what is the utility function for the cooperative network, and what do the components of this function mean substantively.
+
+The first component of the utility function is the cost $c$. This is multiplied by the out degree $d_{i}(g)$. Each player in the network pays some cost for cooperating, and this cost is paid for each player with which they cooperate (forming a link). We need to include a cost term in our utility function for two major reasons, one on the modeling side and one of the theoretically side. On the formal side, if cooperation were costless then the only equilibria would be those where each actor cooperated with each other actor (as long as there was at least $\epsilon>0$ utility for cooperation), and all networks would have uninteresting equilibria. Theoretically, we have reason to believe that many of the cooperative behaviors we are interested in are costly: whether it is the risk of war from alliance membership, the domestic political costs of freer trade, or the pecuniary costs of of joint research. In many cases the benefits will swamp the costs, but the costs exist.
+
+The next question in the utility function is the benefit each player receives from a given graph $g$. Here there are a number of potential factors that must be decided on. The first is whether states have any differential endowments that would make cooperating with one actor preferable to cooperation with another. In this case there are two reasonable endowments to include in the model. The first is capabilities: states have access to different resources, and so networks involving the United States would succeed in providing more benefits to their members than those involving Monaco, \emph{ceteris paribus}. Here an important question concerns the incentives of differently endowed individuals: scholars have argued for the  The other potential endowment to model would be some measure of amity or ideology: cooperation between more ideologically similar states would seem to be preferable to cooperating with more diverse states, as the product of cooperation would likely be more agreeable. In each case, the endowment would change the weight of an individual states contribution to the utility. 
+
+The other question is the role that a network plays in the utility function in causing it to differ from a simpler n-player game. One possible role a network plays is in having decreasing returns, or some form of substitution effect. We can account for this by having a concave down utility function such that cooperating with some states makes the benefit of cooperating with more less. The other issue is that there are potential positive externalities to cooperation that are shared by third parties in the network. This would imply that the utility of a given graph includes discounted utilities even from those states not directly linked, which we use the term $\delta^{l}$ where $\delta$ is the discount from not being directly connected, and $l$ is the shortest distance to that actor in the graph.
+
+Our proposed utility function is thus:
+\begin{equation}
+u_{i}(g) = \log (\sum_{i \neq j}  m(j)*r(i,j)*\delta^{l(i,j)}) - c*d_{i}(g)
+\end{equation}
+where, $m(j)$ is the material endowment of actor $j$, $r(i,j)$ is the discount based on ideological distance for $i, j$, $\delta$ is the discount rate for n'th order effects in the matrix, $l(i,j)$ is the shortest distance between $i, j$, $c$ is the cost of cooperation, and $d_{i}(g)$ is the outdegree of actor $i$ in graph $g$ (the number of actors $i$ is linked to). All of these variables are standardized such that the maximum value is $1$ and the minimum is $0$.
+
 \subsection{Data}
 \subsection{Description of Equilibrium Network[s]}
 
+
 \section{Testing the Endogeneous Networks}
 \subsection{Measures of Network Comparison}
+One useful test of the models descriptive ability would be looking at Matrix Goodness of fit tests. Authors working on Exponential Random Graph Models (hence ERGM) have proposed a form that looks at four descriptive statistics of graphs that they use to determine how similar two graphs are. These four statistics are \emph{geodesic distance distribution} which is the percent of dyads in the matrix that have a shortest distance of $k$ links; the \emph{edgewise shared partner distribution}, which is the distribution of $EP_0, EP_1...EP_{n-1}$ which is the number of links between two nodes that have exactly $i$ neighbors in common, divided by the total number of links in the graph; the \emph{degree distribution} which is the distribution of the number of nodes with exactly $i$ relationships; and the \emph{triad census distribution}, the proportion of 3 node sets with 0, 1, 2 and 3 edges among them.
+
+We can compare the goodness of fit of the network we generated theoretically and the observed network to the goodness of fit tests for a few other simple models and the observed data, such as the empty graph, a full graph, and a graph where the likelihood of any given dyad being linked is $p$, where $p = \text{observed links}/\text{possible links}$.
+
 \subsection{Observed Cooperation}
 \subsection{Latent Cooperation--Do we need this one?}
 \subsection{Data Analysis}
